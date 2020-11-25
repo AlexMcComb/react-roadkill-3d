@@ -1,0 +1,265 @@
+* {
+  box-sizing: border-box;
+}
+
+body{
+  overflow:hidden;
+  padding: 0;
+  margin: auto;
+}
+
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.App-header {
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: white;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.button{
+  width: 33px;
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  z-index: 100;
+  cursor: pointer;
+  padding: 5px;
+  border: solid rgb(230, 225, 225) 1.5px;
+  border-radius: 6px;
+  background-color: white;
+}
+
+.button:hover, .filterButton:hover, .submit:hover, .layerButton:hover{
+  background-color: rgb(231, 229, 229);
+}
+
+.filterButton{
+  width: 33px;
+  position: absolute;
+  top: 20px;
+  left: 30px;
+  z-index: 100;
+  cursor: pointer;
+  padding: 5px;
+  border: solid rgb(230, 225, 225) 1.5px;
+  border-radius: 6px;
+  background-color: white;
+}
+
+.layerButton{
+  width: 35px;
+  position: absolute;
+  top: 20px;
+  left: 80px;
+  z-index: 100;
+  cursor: pointer;
+  padding: 5px;
+  border: solid rgb(230, 225, 225) 1.5px;
+  border-radius: 6px;
+  background-color: white;
+}
+
+.submit{
+  cursor: pointer;
+  padding: 5px;
+  border: solid rgb(230, 225, 225) 1.5px;
+  border-radius: 6px;
+  background-color: white;
+  display:block;
+  margin-top: 7px;
+  font-size: 16px;
+  position: absolute;
+  z-index: -999;
+}
+
+.filterForm{
+  border-radius: 3px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  font-family:
+    ff-clan-web-pro, "Helvetica Neue", Helvetica, sans-serif !important;
+  font-size: '12px';
+  line-height: 1.833;
+  width: 200;
+  position: absolute;
+  top: 60px;
+  left: 20px;
+  padding: 25px;
+  z-index: 100;
+  width: 250px;
+  height: 520px;
+  background-color: white;
+}
+
+.layerForm {
+  border-radius: 3;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  font-family:
+    ff-clan-web-pro, "Helvetica Neue", Helvetica, sans-serif !important;
+  font-size: '12px';
+  line-height: 1.833;
+  width: 200;
+  position: absolute;
+  top: 60px;
+  left: 20px;
+  padding: 20px;
+  z-index: 100;
+  background: white;
+  width: 250px;
+  height: 200px;
+}
+
+.layer-controls{ 
+  border-radius: 3;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  font-family:
+    ff-clan-web-pro, "Helvetica Neue", Helvetica, sans-serif !important;
+  font-size: '12px';
+  line-height: 1.833;
+  position: absolute;
+  top: 60px;
+  right: 20px;
+  padding: 20px;
+  z-index: 100;
+  background: white;
+}
+
+.tooltip {
+    position: absolute;
+    padding: 4px;
+    background: rgba(255, 255, 255, 0.8);
+    color: black;
+    max-width: 300px;
+    font-size: 12px;
+    z-index: 9;
+    border-radius: 10px;
+    font-weight: bolder;
+}
+
+.select-menu {
+  font-size: 18px;
+  border-color: rgb(212, 212, 212);
+  font-family: Helvetica, "sans-serif";
+  color: rgb(88, 88, 88);
+  padding-top: 2px;
+  padding-bottom: 0px;
+}
+
+.container {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 18px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  position: absolute;
+  top: 3px;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+}
+
+/* On mouse-over, add a grey background color */
+.container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.container input:checked ~ .checkmark {
+  background-color: rgb(92, 170, 184);
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.container .checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+input[type=number] {
+    -moz-appearance:textfield; /* Firefox */
+}
+
+.filter input[type=text] {  
+  outline: 0;
+  border-width: 0 0 1px;
+  border-color: rgb(113, 113, 114);
+  margin-top: 0px;
+  margin-bottom:10px;
+}
+
+.filter input[type=text]:focus {  
+  border-color: rgb(92, 170, 184);
+  font-size: 17px;
+}
+
+.filter input[type="text"]:disabled {
+  background: #e9e9e9;
+}
+
+.label {
+  font-size: 13px;
+}
+
+.filter select {
+  margin-bottom: 10px;
+  outline: none;
+  border-width: 0 0 1px;
+  border-color: rgb(113, 113, 114);
+}
