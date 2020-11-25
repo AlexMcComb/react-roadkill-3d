@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/react-roadkill-3d/static/css/main.0a790b75.chunk.css",
+    "main.js": "/react-roadkill-3d/static/js/main.a59567ca.chunk.js",
+    "main.js.map": "/react-roadkill-3d/static/js/main.a59567ca.chunk.js.map",
+    "runtime-main.js": "/react-roadkill-3d/static/js/runtime-main.4d2ea8f9.js",
+    "runtime-main.js.map": "/react-roadkill-3d/static/js/runtime-main.4d2ea8f9.js.map",
+    "static/css/2.2035290e.chunk.css": "/react-roadkill-3d/static/css/2.2035290e.chunk.css",
+    "static/js/2.f9f451de.chunk.js": "/react-roadkill-3d/static/js/2.f9f451de.chunk.js",
+    "static/js/2.f9f451de.chunk.js.map": "/react-roadkill-3d/static/js/2.f9f451de.chunk.js.map",
+    "index.html": "/react-roadkill-3d/index.html",
+    "static/css/2.2035290e.chunk.css.map": "/react-roadkill-3d/static/css/2.2035290e.chunk.css.map",
+    "static/css/main.0a790b75.chunk.css.map": "/react-roadkill-3d/static/css/main.0a790b75.chunk.css.map",
+    "static/js/2.f9f451de.chunk.js.LICENSE.txt": "/react-roadkill-3d/static/js/2.f9f451de.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.4d2ea8f9.js",
+    "static/css/2.2035290e.chunk.css",
+    "static/js/2.f9f451de.chunk.js",
+    "static/css/main.0a790b75.chunk.css",
+    "static/js/main.a59567ca.chunk.js"
+  ]
+}
