@@ -26,7 +26,7 @@ const Filter = props => {
           className={"select-menu"}
         >
           {moment.months().map((label, value) => (
-            <option value={value}>{label}</option>
+            <option value={value} key={label}>{label}</option>
           ))}
         </select>
       </div>
@@ -37,9 +37,9 @@ const Filter = props => {
           value={month.year()}
           onChange={e => onYearSelect(month, e.target.value)}
         >
-          <option value={moment().year() - 4}>2016</option>
-          <option value={moment().year() - 3}>2017</option>
-          <option value={moment().year() - 2}>2018</option>
+          <option value={moment().year() - 5} key={2016}>2016</option>
+          <option value={moment().year() - 4} key={2017}>2017</option>
+          <option value={moment().year() - 3} key={2018}>2018</option>
           {/* <option value={moment().year()}>{moment().year()}</option> */}
         </select>
       </div>
@@ -227,7 +227,7 @@ const Filter = props => {
               }
               isOutsideRange={() => false}
               minimumNights={0}
-              openDirection={"OPEN_DOWN"}
+              openDirection={"down"}
               numberOfMonths={1}
               focused={props.focused}
               renderMonthElement={renderMonthElement}
@@ -252,7 +252,7 @@ const Filter = props => {
         <label className="label">Route</label>
         <Autocomplete options={ROUTES} />
         <label className="label">Milepost</label>
-        <div class="input-field">
+        <div className="input-field">
           <input
             type="text"
             onChange={handleFromChange}
