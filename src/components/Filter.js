@@ -12,9 +12,30 @@ import { SPECIES } from "../species";
 
 import "react-dates/initialize";
 import "react-dates/lib/css/_datepicker.css";
-const Filter = props => {
+// TODO: UPDATE IN THE FUTURE TO USE ELASTICSEARCH TO MAKE FILTERING CLEANER/EASIER
+const Filter = ({
+  userInput,
+  from,
+  to,
+  startDate,
+  endDate,
+  onProcessData,
+  onProcessAllRoadkill,
+  onFilterToggle,
+  filterDisplay,
+  onDatesChange,
+  onSpeciesChange,
+  onFromChange,
+  onToChange,
+  onSpeciesChangePoints,
+  currentSpecies,
+  onStyleChange,
+  focusedInput,
+  onFocusedInputChanged,
+  focused,
+}) => {
   const datesChange = (startDate, endDate) => {
-    props.onDatesChange(startDate, endDate);
+    onDatesChange(startDate, endDate);
   };
 
   const renderMonthElement = ({ month, onMonthSelect, onYearSelect }) => (
@@ -22,48 +43,54 @@ const Filter = props => {
       <div>
         <select
           value={month.month()}
-          onChange={e => onMonthSelect(month, e.target.value)}
+          onChange={(e) => onMonthSelect(month, e.target.value)}
           className={"select-menu"}
         >
           {moment.months().map((label, value) => (
-            <option value={value} key={label}>{label}</option>
+            <option value={value} key={label}>
+              {label}
+            </option>
           ))}
         </select>
       </div>
       <div>
-        {/* update every year to make sure dates are accurate */}
         <select
           className={"select-menu"}
           value={month.year()}
-          onChange={e => onYearSelect(month, e.target.value)}
+          onChange={(e) => onYearSelect(month, e.target.value)}
         >
-          <option value={moment().year() - 5} key={2016}>2016</option>
-          <option value={moment().year() - 4} key={2017}>2017</option>
-          <option value={moment().year() - 3} key={2018}>2018</option>
-          {/* <option value={moment().year()}>{moment().year()}</option> */}
+          <option value={2016} key={2016}>
+            2016
+          </option>
+          <option value={2017} key={2017}>
+            2017
+          </option>
+          <option value={2018} key={2018}>
+            2018
+          </option>
         </select>
       </div>
     </div>
   );
 
-  const handleSubmit = event => {
+  const handleSubmit = (event) => {
     event.preventDefault();
     speciesChange();
   };
 
-  const handleChange = event => {
+  const handleChange = (event) => {
     event.preventDefault();
-    props.onSpeciesChange({ species: event.target.value });
+    onSpeciesChange({ species: event.target.value });
   };
 
-  const handleFromChange = event => {
+  const handleFromChange = (event) => {
     event.preventDefault();
-    props.onFromChange(event.target.value);
+    onFromChange(event.target.value);
   };
 
-  const handleToChange = event => {
+  const handleToChange = (event) => {
     event.preventDefault();
-    props.onToChange(event.target.value);
+    onToChange(event.target.value);
   };
 
   const loadAllRoadKill = () => {
@@ -77,42 +104,42 @@ const Filter = props => {
         position: [Number(curr.longitude), Number(curr.latitude)],
         //format date as ISO to match moment date format in the Airbnb calendar
         date: [mydate.toISOString()],
-        datenumber: [Number(curr.datenumber)]
+        datenumber: [Number(curr.datenumber)],
       });
       return accu;
     }, []);
-    props.onProcessAllRoadkill(points);
-    const result = points.filter(item =>
-      props.userInput.userInput && props.from == "" && props.to == ""
-        ? item.date >= props.startDate.format() &&
-          item.date <= props.endDate.format() &&
-          item.route[0] == props.userInput.userInput
-        : props.userInput.userInput && props.from !== "" && props.to !== ""
-        ? item.date >= props.startDate.format() &&
-          item.date <= props.endDate.format() &&
-          item.route[0] == props.userInput.userInput &&
-          item.MP[0] >= props.from &&
-          item.MP[0] <= props.to
-        : item.date >= props.startDate.format() &&
-          item.date <= props.endDate.format()
-    );
+    onProcessAllRoadkill(points);
+    const result = points.filter((item) => {
+      const { date, route, MP } = item;
+      return userInput.userInput && from === "" && to === ""
+        ? date >= startDate.format() &&
+            date <= endDate.format() &&
+            route[0] == userInput.userInput
+        : userInput.userInput && from !== "" && to !== ""
+        ? date >= startDate.format() &&
+          date <= endDate.format() &&
+          route[0] == userInput.userInput &&
+          MP[0] >= from &&
+          MP[0] <= to
+        : date >= startDate.format() && date <= endDate.format();
+    });
     if (
       !Array.isArray(result) ||
       !result.length ||
-      props.startDate == null ||
-      props.endDate == null ||
-      (props.to == "" && props.from !== "") ||
-      (props.to !== "" && props.from == "")
+      startDate == null ||
+      endDate == null ||
+      (to === "" && from !== "") ||
+      (to !== "" && from === "")
     ) {
       alert("No results for your selection");
       loadPoints();
     } else {
-      props.onProcessAllRoadkill(result);
+      onProcessAllRoadkill(result);
     }
   };
 
   const speciesChange = () => {
-    if (props.startDate == null || props.endDate == null) {
+    if (startDate == null || endDate == null) {
       alert("Invalid dates.  Please use the format MM/DD/YYYY");
       loadPoints();
     } else {
@@ -126,46 +153,47 @@ const Filter = props => {
           position: [Number(curr.longitude), Number(curr.latitude)],
           //format date as ISO to match moment date format in the Airbnb calendar
           date: [mydate.toISOString()],
-          datenumber: [Number(curr.datenumber)]
+          datenumber: [Number(curr.datenumber)],
         });
         return accu;
       }, []);
-      props.onSpeciesChangePoints(points);
-      if (props.currentSpecies.species == "All Roadkill") {
+      onSpeciesChangePoints(points);
+      if (currentSpecies.species == "All Roadkill") {
         loadAllRoadKill();
       } else {
-        const result = points.filter(item =>
-          props.userInput.userInput && props.from == "" && props.to == ""
-            ? item.species == props.currentSpecies.species &&
-              item.date >= props.startDate.format() &&
-              item.date <= props.endDate.format() &&
-              item.route[0] == props.userInput.userInput
-            : props.userInput.userInput &&
-              props.userInput.userInput !== null &&
-              props.from !== "" &&
-              props.to !== ""
-            ? item.species == props.currentSpecies.species &&
-              item.date >= props.startDate.format() &&
-              item.date <= props.endDate.format() &&
-              item.route[0] == props.userInput.userInput &&
-              item.MP[0] >= props.from &&
-              item.MP[0] <= props.to
-            : item.species == props.currentSpecies.species &&
-              item.date >= props.startDate.format() &&
-              item.date <= props.endDate.format()
-        );
+        const result = points.filter((item) => {
+          const { date, route, MP, species } = item;
+          return userInput.userInput && from === "" && to === ""
+            ? species == currentSpecies.species &&
+                date >= startDate.format() &&
+                date <= endDate.format() &&
+                route[0] == userInput.userInput
+            : userInput.userInput &&
+              userInput.userInput !== null &&
+              from !== "" &&
+              to !== ""
+            ? species == currentSpecies.species &&
+              date >= startDate.format() &&
+              date <= endDate.format() &&
+              route[0] == userInput.userInput &&
+              MP[0] >= from &&
+              MP[0] <= to
+            : species == currentSpecies.species &&
+              date >= startDate.format() &&
+              date <= endDate.format();
+        });
         if (
           !Array.isArray(result) ||
           !result.length ||
-          props.startDate == null ||
-          props.endDate == null ||
-          (props.to == "" && props.from !== "") ||
-          (props.to !== "" && props.from == "")
+          startDate == null ||
+          endDate == null ||
+          (to === "" && from !== "") ||
+          (to !== "" && from === "")
         ) {
           alert("No results for your selection");
           loadPoints();
         } else {
-          props.onSpeciesChangePoints(result);
+          onSpeciesChangePoints(result);
         }
       }
     }
@@ -182,54 +210,52 @@ const Filter = props => {
         position: [Number(curr.longitude), Number(curr.latitude)],
         //format date as ISO to match moment date format in the Airbnb calendar
         date: [mydate.toISOString()],
-        datenumber: [Number(curr.datenumber)]
+        datenumber: [Number(curr.datenumber)],
       });
       return accu;
     }, []);
-    props.onProcessData(points);
+    onProcessData(points);
   };
 
   return (
     <div className="filter">
       <img
         src="https://i.ibb.co/hYgZRbQ/filter.png"
-        onClick={props.onFilterToggle}
+        onClick={onFilterToggle}
         className={"filterButton"}
         alt="Filter"
         title="Filter"
       />
       <form
         className="filterForm"
-        style={{ display: props.filterDisplay }}
+        style={{ display: filterDisplay }}
         onSubmit={handleSubmit}
       >
         <label className="label">
           Map Style
-          <MapStylePicker
-            onStyleChange={props.onStyleChange}
-          />
+          <MapStylePicker onStyleChange={onStyleChange} />
         </label>
         <label className="label">
           Date Range
           {/* move function out of render because it causes re render */}
           {
             <DateRangePicker
-              startDate={props.startDate} // momentPropTypes.momentObj or null,
+              startDate={startDate} // momentPropTypes.momentObj or null,
               startDateId="your_unique_start_date_id" // PropTypes.string.isRequired,
-              endDate={props.endDate} // momentPropTypes.momentObj or null,
+              endDate={endDate} // momentPropTypes.momentObj or null,
               endDateId="your_unique_end_date_id" // PropTypes.string.isRequired,
               onDatesChange={({ startDate, endDate }) =>
                 datesChange(startDate, endDate)
               }
-              focusedInput={props.focusedInput}
-              onFocusChange={focusedInput =>
-                props.onFocusedInputChanged(focusedInput)
+              focusedInput={focusedInput}
+              onFocusChange={(focusedInput) =>
+                onFocusedInputChanged(focusedInput)
               }
               isOutsideRange={() => false}
               minimumNights={0}
               openDirection={"down"}
               numberOfMonths={1}
-              focused={props.focused}
+              focused={focused}
               renderMonthElement={renderMonthElement}
             />
           }
@@ -238,11 +264,11 @@ const Filter = props => {
           Species
           <select
             className="species-picker select-menu"
-            value={props.currentSpecies.species}
+            value={currentSpecies.species}
             //gets the value from the drop down
             onChange={handleChange}
           >
-            {SPECIES.map(species => (
+            {SPECIES.map((species) => (
               <option key={species.value} value={species.value}>
                 {species.label}
               </option>
@@ -260,7 +286,7 @@ const Filter = props => {
             id="from"
             placeholder="From"
             disabled={
-              props.userInput.userInput && props.userInput.userInput !== null
+              userInput.userInput && userInput.userInput !== null
                 ? ""
                 : "disabled"
             }
@@ -272,7 +298,7 @@ const Filter = props => {
           className="search-box"
           placeholder="To"
           disabled={
-            props.userInput.userInput && props.userInput.userInput !== null
+            userInput.userInput && userInput.userInput !== null
               ? ""
               : "disabled"
           }
@@ -302,7 +328,7 @@ function mapStateToProps(state) {
     points: state.points,
     userInput: state.userInput,
     from: state.from,
-    to: state.to
+    to: state.to,
   };
 }
 
@@ -337,11 +363,8 @@ function mapDispatchToProps(dispatch) {
     },
     onToChange(to) {
       dispatch(actions.toChange(to));
-    }
+    },
   };
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Filter);
+export default connect(mapStateToProps, mapDispatchToProps)(Filter);
